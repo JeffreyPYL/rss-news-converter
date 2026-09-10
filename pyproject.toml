@@ -1,0 +1,48 @@
+[project]
+name = "news-digest"
+version = "0.1.0"
+description = "Personal news digest automation"
+readme = "README.md"
+authors = [
+    { name = "Jeffrey Leung", email = "dev@jeffreyleung.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "dropbox>=12.2.1",
+    "ebooklib>=0.20",
+    "feedparser>=6.0.14",
+    "google-api-python-client>=2.199.0",
+    "google-auth>=2.57.0",
+    "httpx>=0.28.1",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+    "trafilatura>=2.2.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "coverage>=7.16.0",
+    "crap4py>=0.1.1",
+    "mutmut>=3.7.0",
+    "pyrefly>=1.2.0",
+    "pytest>=9.1.1",
+    "pytest-httpx>=0.36.2",
+    "ruff>=0.16.5",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: hits a real subprocess or network dependency (e.g. npx defuddle) rather than a fake — excluded from mutation testing, which invokes the suite too many times for that to be reliable",
+]
+
+[tool.coverage.run]
+source = ["src"]
+
+[tool.mutmut]
+source_paths = ["src/"]
+pytest_add_cli_args = ["-m", "not integration"]

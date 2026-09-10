@@ -1,0 +1,20 @@
+schema: spec-driven
+
+context: |
+  Tech stack and coding conventions are documented in CLAUDE.md at the repo root
+  (Python, uv, ruff, Pyrefly, just, httpx-only HTTP). The current domain/application/infrastructure
+  layout, pipeline, and every port/adapter pairing are documented in ARCHITECTURE.md — read it for
+  what already exists before designing new structure. Testing conventions (functional-first TDD,
+  pytest-httpx fixtures only, mutation testing, CRAP score gate at 30) are in the python-testing
+  skill. Read all three before writing design.md or tasks.md.
+
+rules:
+  design:
+    - Follow the domain/application/infrastructure layout from ARCHITECTURE.md; call out any deviation explicitly and why.
+    - Note which pipeline stages get ports (Protocol interfaces) — only where a real second implementation already exists (extractor, feed source, renderer, delivery), not speculatively.
+  tasks:
+    - Include a setup task that scaffolds uv, ruff, Pyrefly, mutmut, crap4py, and the justfile recipes (install, lint, typecheck, test, mutate, crap, dev) before any feature task. Skip this task if that scaffolding already exists.
+    - Every feature task that adds pipeline logic pairs with a functional happy-path test per the python-testing skill; don't split "write code" and "write test" into separate tasks.
+    - If the change adds, removes, or moves a module, port, or adapter under src/news_digest/, include a task that updates ARCHITECTURE.md to match — in the same task as the code change, not a separate follow-up.
+    - If the change adds, renames, or removes an env var, a just recipe, a prerequisite, a delivery target, an extractor option, or the CLI invocation shape — or moves something out of README.md's "Current status" unbuilt list — include a task that updates README.md to match, in the same task as the code change, not a separate follow-up.
+    - Add a closing quality-gate task that runs `just mutate` and `just crap` across the finished pipeline and fixes any surviving mutant or function scoring over 30, before the change is considered done.

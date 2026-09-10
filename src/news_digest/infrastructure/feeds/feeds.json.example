@@ -1,0 +1,114 @@
+{
+  "ottawa": {
+    "direct": [
+      {
+        "outlet": "CBC",
+        "url": "https://www.cbc.ca/webfeed/rss/rss-canada-ottawa",
+        "timeout": 20
+      }
+    ],
+    "keyword_filtered": [
+      {
+        "outlet": "BBC",
+        "url": "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml",
+        "keywords": ["ottawa"]
+      },
+      {
+        "outlet": "Globe and Mail",
+        "url": "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/canada/",
+        "keywords": ["ottawa"]
+      }
+    ]
+  },
+  "canada": {
+    "direct": [
+      { "outlet": "BBC", "url": "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml" },
+      {
+        "outlet": "CBC",
+        "url": "https://www.cbc.ca/webfeed/rss/rss-canada",
+        "timeout": 20
+      },
+      {
+        "outlet": "Globe and Mail",
+        "url": "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/canada/"
+      }
+    ]
+  },
+  "hong-kong": {
+    "direct": [
+      { "outlet": "SCMP", "url": "https://www.scmp.com/rss/2/feed/" },
+      { "outlet": "RTHK", "url": "https://rthk9.rthk.hk/rthk/news/rss/e_expressnews_elocal.xml" }
+    ],
+    "keyword_filtered": [
+      {
+        "outlet": "BBC",
+        "url": "https://feeds.bbci.co.uk/news/world/asia/rss.xml",
+        "keywords": ["hong kong", "hongkong"]
+      },
+      {
+        "outlet": "CBC",
+        "url": "https://www.cbc.ca/webfeed/rss/rss-world",
+        "keywords": ["hong kong", "hongkong"],
+        "timeout": 20
+      },
+      {
+        "outlet": "Globe and Mail",
+        "url": "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/world/",
+        "keywords": ["hong kong", "hongkong"]
+      }
+    ]
+  },
+  "china": {
+    "keyword_filtered": [
+      {
+        "outlet": "BBC",
+        "url": "https://feeds.bbci.co.uk/news/world/asia/rss.xml",
+        "keywords": ["china", "beijing", "chinese communist party", "xi jinping"]
+      },
+      {
+        "outlet": "CBC",
+        "url": "https://www.cbc.ca/webfeed/rss/rss-world",
+        "keywords": ["china", "beijing", "chinese communist party", "xi jinping"],
+        "timeout": 20
+      },
+      {
+        "outlet": "Globe and Mail",
+        "url": "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/world/",
+        "keywords": ["china", "beijing", "chinese communist party", "xi jinping"]
+      }
+    ]
+  },
+  "tech": {
+    "direct": [
+      { "outlet": "BBC", "url": "https://feeds.bbci.co.uk/news/technology/rss.xml" },
+      {
+        "outlet": "CBC",
+        "url": "https://www.cbc.ca/webfeed/rss/rss-technology",
+        "timeout": 20
+      },
+      {
+        "outlet": "Globe and Mail",
+        "url": "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/business/technology/"
+      },
+      {
+        "outlet": "The Verge",
+        "url": "https://www.theverge.com/rss/partner/subscriber-only-full-feed/rss.xml",
+        "cap": 20
+      }
+    ]
+  },
+  "global": {
+    "direct": [
+      { "outlet": "BBC", "url": "https://feeds.bbci.co.uk/news/world/rss.xml" },
+      {
+        "outlet": "CBC",
+        "url": "https://www.cbc.ca/webfeed/rss/rss-world",
+        "timeout": 20
+      },
+      {
+        "outlet": "Globe and Mail",
+        "url": "https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/world/"
+      }
+    ]
+  }
+}

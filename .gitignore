@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+mutants/
+.mutmut-cache
+coverage.lcov
+.coverage
+dist/
+*.egg-info/
+run_state.json
+src/news_digest/infrastructure/feeds/feeds.json
