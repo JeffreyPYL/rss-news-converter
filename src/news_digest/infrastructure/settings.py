@@ -34,6 +34,14 @@ class Settings(BaseSettings):
     extractor: str | None = None
     synthesis_enabled: str | None = None
     state_path: Path = DEFAULT_STATE_PATH
+
+    @property
+    def is_synthesis_enabled(self) -> bool:
+        """Parse synthesis_enabled string into a boolean."""
+        if self.synthesis_enabled is None:
+            return False
+        return self.synthesis_enabled.strip().lower() in ("1", "true", "yes")
+
     # None means "use the packaged default feeds.json" (see
     # infrastructure/feeds/config.py::DEFAULT_FEEDS_PATH) — set this only to
     # point at a different feed list entirely.

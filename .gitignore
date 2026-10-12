@@ -11,3 +11,4 @@ dist/
 *.egg-info/
 run_state.json
 src/news_digest/infrastructure/feeds/feeds.json
+.openpackage/

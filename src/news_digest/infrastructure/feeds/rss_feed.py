@@ -82,7 +82,7 @@ class RssFeedSource:
             futures = [
                 executor.submit(self._fetch_one, feed, topic, since) for feed in feeds
             ]
-            for feed, future in zip(feeds, futures):
+            for feed, future in zip(feeds, futures, strict=True):
                 try:
                     articles.extend(future.result())
                 except httpx.HTTPError as exc:

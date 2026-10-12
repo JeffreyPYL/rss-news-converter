@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "change_id": "python-ruleset-compliance",
+  "timestamp": "2026-10-12T00:30:00Z",
+  "git_commit": "working-tree",
+  "git_base": "6cd7cebcf15a5658065a497bdaa392df0c5a6953",
+  "overall_status": "pass",
+  "phases": {
+    "functional": {
+      "status": "pass",
+      "tests_passed": 138,
+      "tests_failed": 0
+    },
+    "coverage": {
+      "status": "pass",
+      "threshold_percent": 90.0,
+      "min_file_percent": 100.0,
+      "files_evaluated": [
+        { "path": "src/news_digest/application/synthesis.py", "line_coverage_pct": 100.0 },
+        { "path": "src/news_digest/infrastructure/feeds/rss_feed.py", "line_coverage_pct": 100.0 },
+        { "path": "src/news_digest/infrastructure/settings.py", "line_coverage_pct": 100.0 }
+      ],
+      "lcov_pointer": "coverage.lcov"
+    },
+    "mutants": {
+      "status": "pass",
+      "missed_mutants": 0
+    },
+    "crap": {
+      "status": "pass",
+      "max_crap_score": 7.0
+    }
+  }
+}
