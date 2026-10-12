@@ -1,4 +1,0 @@
-[toolchain]
-channel = "1.95.0"   # exact stable for reproducible CI; keep >= rust-version; bump deliberately
-profile = "minimal"
-components = ["rustfmt", "clippy", "llvm-tools-preview"]

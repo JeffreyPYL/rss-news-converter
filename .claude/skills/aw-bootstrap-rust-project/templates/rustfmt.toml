@@ -1,2 +1,0 @@
-# Stable options only. Edition and style edition come from Cargo.toml.
-max_width = 100
