@@ -1,16 +1,16 @@
 # aw-handoff: python-ruleset-compliance
-updated: 2026-10-12T00:31:00.000000+00:00
-stage_done: ship_reviewed
-status: READY
+updated: 2026-10-12T00:38:00.000000+00:00
+stage_done: pr
+status: ready_for_next
 
 ## pointers
 - repo: /Users/jeffreyleung/dev/rss-news-converter
 - branch: feat/python-ruleset-compliance
 - worktree: none
 - base_sha: 6cd7cebcf15a5658065a497bdaa392df0c5a6953
-- pr: none
+- pr: https://github.com/JeffreyPYL/rss-news-converter/pull/2
 - issues: none
-- ci: none
+- ci: pending
 - retry_count: 0
 
 ## facts
@@ -30,9 +30,9 @@ status: READY
 - src/news_digest/infrastructure/settings.py:38-44 - added is_synthesis_enabled property
 - tests/functional/test_synthesis.py:40-108 - verified synthesis settings property and default enabled behavior
 - tests/functional/test_cli.py:75-85 - fixed time-drift in cli functional test with explicit record_success
-- openspec/changes/python-ruleset-compliance/test-report.json:1-35 - dynamic verification artifact
+- openspec/changes/archive/2026-10-11-python-ruleset-compliance/test-report.json:1-35 - dynamic verification artifact
 
 ## suggested_next_step
-- Next: /aw-pr
+- Next: /aw-address-pr-issues
 - New session?: yes
-- Carry forward: openspec/changes/python-ruleset-compliance/aw-handoff.md
+- Carry forward: openspec/changes/archive/2026-10-11-python-ruleset-compliance/aw-handoff.md
