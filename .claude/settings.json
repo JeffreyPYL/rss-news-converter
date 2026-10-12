@@ -1,0 +1,62 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'for d in \"$CLAUDE_PROJECT_DIR\" \"$HOME\"; do f=\"$d/.claude/skills/aw-bulk-read/scripts/claude-read-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; done; exit 0'"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'for d in \"$CLAUDE_PROJECT_DIR\" \"$HOME\"; do f=\"$d/.claude/skills/aw-bulk-read/scripts/claude-read-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; done; exit 0'"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'for d in \"$CLAUDE_PROJECT_DIR\" \"$HOME\"; do f=\"$d/.claude/skills/aw-bulk-read/scripts/claude-read-guard.sh\"; [ -x \"$f\" ] && exec \"$f\"; done; exit 0'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'for d in \"$CLAUDE_PROJECT_DIR\" \"$HOME\"; do f=\"$d/.claude/skills/aw-ship-review/scripts/gate-check.sh\"; [ -x \"$f\" ] && exec \"$f\" claude; done; exit 0'",
+            "timeout": 300
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'for d in \"$CLAUDE_PROJECT_DIR\" \"$HOME\"; do f=\"$d/.claude/skills/aw-ship-review/scripts/gate-check.sh\"; [ -x \"$f\" ] && exec \"$f\" claude; done; exit 0'",
+            "timeout": 300
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'for d in \"$CLAUDE_PROJECT_DIR\" \"$HOME\"; do f=\"$d/.claude/skills/aw-ship-review/scripts/gate-check.sh\"; [ -x \"$f\" ] && exec \"$f\" claude; done; exit 0'",
+            "timeout": 300
+          }
+        ]
+      }
+    ]
+  }
+}

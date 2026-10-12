@@ -1,0 +1,5 @@
+name: rss-news-converter
+dependencies:
+- name: agent-workflow
+  base: /Users/jeffreyleung/dev/agent-workflow
+dev-dependencies: []

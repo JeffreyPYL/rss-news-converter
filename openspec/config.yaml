@@ -1,7 +1,7 @@
 schema: spec-driven
 
 context: |
-  Tech stack and coding conventions are documented in CLAUDE.md at the repo root
+  Tech stack and coding conventions are documented in CLAUDE.md and GEMINI.md at the repo root
   (Python, uv, ruff, Pyrefly, just, httpx-only HTTP). The current domain/application/infrastructure
   layout, pipeline, and every port/adapter pairing are documented in ARCHITECTURE.md — read it for
   what already exists before designing new structure. Testing conventions (functional-first TDD,

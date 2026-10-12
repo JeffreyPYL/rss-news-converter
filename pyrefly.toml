@@ -1,0 +1,5 @@
+# Pyrefly configuration
+# https://pyrefly.org/en/docs/configuration/
+
+python-version = "3.13"
+preset = "basic"

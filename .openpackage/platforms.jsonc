@@ -1,0 +1,374 @@
+{
+  "global": {
+    "export": [
+      {
+        "from": "workflows/**/*.yaml",
+        "to": ".conductor/workflows/**/*.yaml"
+      },
+      {
+        "from": "scripts/**/aw-*",
+        "to": "scripts/**/aw-*"
+      }
+    ],
+    "import": [
+      {
+        "from": "AGENTS.md",
+        "to": "AGENTS.md",
+        "merge": "composite"
+      }
+    ]
+  },
+  "claude": {
+    "name": "Claude Code",
+    "detection": [
+      ".claude",
+      "CLAUDE.md"
+    ],
+    "aliases": [
+      "claudecode"
+    ],
+    "export": [
+      {
+        "from": "rules/**/*.md",
+        "to": ".claude/rules/**/*.md",
+        "map": [
+          {
+            "$unset": [
+              "trigger",
+              "globs"
+            ]
+          }
+        ]
+      },
+      {
+        "from": "commands/**/*.md",
+        "to": ".claude/commands/**/*.md"
+      },
+      {
+        "from": "agents/**/*.md",
+        "to": ".claude/agents/**/*.md",
+        "when": {
+          "$eq": [
+            "$$source",
+            "claude-plugin"
+          ]
+        }
+      },
+      {
+        "from": {
+          "pattern": "agents/**/*.md",
+          "schema": "./schemas/formats/universal-agent.schema.json"
+        },
+        "to": {
+          "pattern": ".claude/agents/**/*.md",
+          "schema": "./schemas/formats/claude-agent.schema.json"
+        },
+        "when": {
+          "$ne": [
+            "$$source",
+            "claude-plugin"
+          ]
+        },
+        "map": [
+          {
+            "$set": {
+              "name": "$$filename"
+            }
+          },
+          {
+            "$pipeline": {
+              "field": "model",
+              "operations": [
+                {
+                  "$replace": {
+                    "pattern": "^(?!anthropic/|claude-|opus$|sonnet$|haiku$).*/.+$",
+                    "with": "inherit"
+                  }
+                },
+                {
+                  "$replace": {
+                    "pattern": "^anthropic/",
+                    "with": ""
+                  }
+                },
+                {
+                  "$replace": {
+                    "pattern": "(-[0-9]+)\\.([0-9]+)",
+                    "with": "$1-$2",
+                    "flags": "g"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "$pipeline": {
+              "field": "tools",
+              "operations": [
+                {
+                  "$map": {
+                    "replace": {
+                      "question": "AskUserQuestion",
+                      "notebook": "NotebookEdit",
+                      "exitplan": "ExitPlanMode"
+                    }
+                  }
+                },
+                {
+                  "$map": {
+                    "each": "capitalize"
+                  }
+                },
+                {
+                  "$reduce": {
+                    "type": "join",
+                    "separator": ", "
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "$switch": {
+              "field": "permissions",
+              "cases": [
+                {
+                  "pattern": {
+                    "edit": "allow",
+                    "bash": "allow",
+                    "webfetch": "allow"
+                  },
+                  "value": "bypassPermissions"
+                },
+                {
+                  "pattern": {
+                    "edit": "allow",
+                    "bash": "allow"
+                  },
+                  "value": "bypassPermissions"
+                },
+                {
+                  "pattern": {
+                    "edit": "allow",
+                    "bash": "ask"
+                  },
+                  "value": "acceptEdits"
+                },
+                {
+                  "pattern": {
+                    "edit": "allow"
+                  },
+                  "value": "acceptEdits"
+                },
+                {
+                  "pattern": {
+                    "edit": "deny",
+                    "bash": "deny"
+                  },
+                  "value": "plan"
+                },
+                {
+                  "pattern": {
+                    "edit": "deny",
+                    "bash": "ask"
+                  },
+                  "value": "dontAsk"
+                },
+                {
+                  "pattern": {
+                    "edit": "deny",
+                    "bash": "allow"
+                  },
+                  "value": "dontAsk"
+                },
+                {
+                  "pattern": {
+                    "edit": "ask",
+                    "bash": "ask"
+                  },
+                  "value": "default"
+                },
+                {
+                  "pattern": {
+                    "edit": "ask"
+                  },
+                  "value": "default"
+                }
+              ]
+            }
+          },
+          {
+            "$rename": {
+              "permissions": "permissionMode"
+            }
+          }
+        ]
+      },
+      {
+        "from": "skills/engineering/**",
+        "to": ".claude/skills/**"
+      },
+      {
+        "from": "skills/productivity/**",
+        "to": ".claude/skills/**"
+      },
+      {
+        "from": "skills/misc/**",
+        "to": ".claude/skills/**"
+      },
+      {
+        "from": "skills/in-progress/**",
+        "to": ".claude/skills/**"
+      },
+      {
+        "from": "skills/**/*",
+        "to": ".claude/skills/**/*"
+      },
+      {
+        "from": [
+          "mcp.jsonc",
+          "mcp.json"
+        ],
+        "to": ".mcp.json",
+        "when": {
+          "$ne": [
+            "$$targetRoot",
+            "~/"
+          ]
+        },
+        "merge": "deep"
+      },
+      {
+        "from": [
+          "mcp.jsonc",
+          "mcp.json"
+        ],
+        "to": ".claude.json",
+        "when": {
+          "$eq": [
+            "$$targetRoot",
+            "~/"
+          ]
+        },
+        "merge": "deep"
+      },
+      {
+        "from": "root/**/*",
+        "to": "**/*",
+        "fallback": true,
+        "comment": "Catch-all: install root-stored files to workspace root"
+      },
+      {
+        "from": "hooks/claude.json",
+        "to": ".claude/settings.json",
+        "merge": "deep"
+      }
+    ]
+  },
+  "antigravity": {
+    "name": "Google Antigravity",
+    "detection": [
+      ".agents"
+    ],
+    "export": [
+      {
+        "from": "rules/**/*.md",
+        "to": ".agents/rules/**/*.md",
+        "map": [
+          {
+            "$unset": [
+              "paths"
+            ]
+          }
+        ]
+      },
+      {
+        "from": "skills/engineering/**",
+        "to": ".agents/skills/**"
+      },
+      {
+        "from": "skills/productivity/**",
+        "to": ".agents/skills/**"
+      },
+      {
+        "from": "skills/misc/**",
+        "to": ".agents/skills/**"
+      },
+      {
+        "from": "skills/in-progress/**",
+        "to": ".agents/skills/**"
+      },
+      {
+        "from": "skills/**/*",
+        "to": ".agents/skills/**/*"
+      },
+      {
+        "from": "agents/**/*.md",
+        "to": ".agents/agents/**/*.md",
+        "map": [
+          {
+            "$set": {
+              "subagent": true
+            }
+          },
+          {
+            "$pipeline": {
+              "field": "model",
+              "operations": [
+                {
+                  "$replace": {
+                    "pattern": "^(anthropic/)?claude-haiku.*$",
+                    "with": "flash"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "$pipeline": {
+              "field": "tools",
+              "operations": [
+                {
+                  "$reduce": {
+                    "type": "join",
+                    "separator": ", "
+                  }
+                },
+                {
+                  "$replace": {
+                    "pattern": "(^|, )glob(?=,|$)",
+                    "with": ""
+                  }
+                },
+                {
+                  "$replace": {
+                    "pattern": "^, ",
+                    "with": ""
+                  }
+                },
+                {
+                  "$reduce": {
+                    "type": "split",
+                    "separator": ", "
+                  }
+                },
+                {
+                  "$map": {
+                    "replace": {
+                      "read": "view_file",
+                      "grep": "grep_search"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "from": "hooks/antigravity.json",
+        "to": ".agents/hooks.json"
+      }
+    ]
+  }
+}

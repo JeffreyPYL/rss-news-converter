@@ -1,0 +1,22 @@
+# Baseline; run `cargo deny init` to compare against the current schema.
+[graph]
+all-features = true
+
+[advisories]
+unmaintained = "all"
+unsound = "all"
+ignore = []   # every entry needs a reason and an expiry comment
+
+[licenses]
+allow = ["MIT", "Apache-2.0", "Unicode-3.0"]   # extend to match your dependency tree
+confidence-threshold = 0.93
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# Who may depend on a private crate (rules/09-module-boundaries.md). Add entries with each new crate:
+# deny = [{ crate = "orders-crud", wrappers = ["orders-service"] }]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"

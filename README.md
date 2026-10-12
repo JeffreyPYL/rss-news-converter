@@ -201,4 +201,4 @@ What's explicitly not built yet (see `openspec/changes/news-digest/design.md`'s 
 
 ## Project layout
 
-See `CLAUDE.md` for the tooling stack and `ARCHITECTURE.md` for the folder layout, the pipeline, and every port/adapter pairing.
+See `CLAUDE.md` and `GEMINI.md` for the tooling stack and `ARCHITECTURE.md` for the folder layout, the pipeline, and every port/adapter pairing.

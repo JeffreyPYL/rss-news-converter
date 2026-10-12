@@ -444,3 +444,8 @@ def test_one_broken_feed_doesnt_block_the_rest(canada_feeds_with_one_broken):
     assert source.skipped[0].outlet == broken_feed.outlet
     assert source.skipped[0].url == broken_feed.url
     assert "timed out" in source.skipped[0].reason
+
+
+def test_rss_feed_source_custom_max_workers():
+    source = RssFeedSource(max_workers=2)
+    assert source._max_workers == 2

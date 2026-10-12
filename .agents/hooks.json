@@ -1,0 +1,12 @@
+{
+  "aw-gates": {
+    "enabled": true,
+    "PreToolUse": [
+      { "matcher": "view_file",
+        "hooks": [{ "type": "command", "command": "bash -c 'for f in .agents/skills/aw-bulk-read/scripts/agy-read-guard.sh \"$HOME/.agents/skills/aw-bulk-read/scripts/agy-read-guard.sh\" \"$HOME/.gemini/antigravity-cli/skills/aw-bulk-read/scripts/agy-read-guard.sh\"; do [ -x \"$f\" ] && exec \"$f\"; done; echo \"{\\\"decision\\\":\\\"allow\\\"}\"'", "timeout": 10 }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "bash -c 'for f in .agents/skills/aw-ship-review/scripts/gate-check.sh \"$HOME/.agents/skills/aw-ship-review/scripts/gate-check.sh\" \"$HOME/.gemini/antigravity-cli/skills/aw-ship-review/scripts/gate-check.sh\"; do [ -x \"$f\" ] && exec \"$f\" agy; done; echo \"{}\"'", "timeout": 300 }] }
+    ]
+  }
+}

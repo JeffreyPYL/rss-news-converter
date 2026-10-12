@@ -1,0 +1,91 @@
+# Install as .github/workflows/ci.yml. Pin each action to a commit SHA before relying on it.
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly: new advisories must not break unrelated PRs
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+      - run: cargo fmt --all --check
+      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+      - run: cargo nextest run --workspace --all-features
+      - run: cargo test --workspace --doc
+      - run: RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --all-features
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just
+      - run: just file-size
+
+  msrv:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85.0   # keep equal to rust-version
+      - uses: Swatinem/rust-cache@v2
+      # `+` is required: rust-toolchain.toml would otherwise override the MSRV toolchain
+      - run: cargo +1.85.0 build --workspace --all-features --locked
+
+  coverage:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest,cargo-llvm-cov
+      - run: cargo llvm-cov nextest --workspace --all-features --lcov --output-path lcov.info --ignore-filename-regex '(/tests/|/tests\.rs$|_tests\.rs$)'
+      - run: cargo install cargo-crap --locked --version 0.6.1
+      - run: cargo crap --lcov lcov.info --workspace --fail-regression
+
+  mutants:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest,cargo-mutants
+      - run: git diff origin/${{ github.base_ref }}...HEAD > pr.diff
+      - run: cargo mutants --in-diff pr.diff --baseline=skip --timeout 60 -- --lib   # add -p per changed crate for large workspaces
+
+  deny:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: EmbarkStudios/cargo-deny-action@v2
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

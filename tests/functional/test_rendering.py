@@ -353,3 +353,11 @@ def test_obsidian_note_with_synthesis_has_exact_expected_layout():
         "",
     ]
     assert markdown_bytes == "\n".join(expected_lines).encode("utf-8")
+
+
+def test_epub_and_obsidian_render_empty_digest():
+    digest = {}
+    epub_bytes = EpubRenderer().render(digest)
+    assert len(epub_bytes) > 0
+    obsidian_bytes = ObsidianRenderer().render(digest)
+    assert len(obsidian_bytes) > 0

@@ -110,3 +110,18 @@ def test_build_digest_happy_path_covers_multiple_topics_and_groups_cross_outlet_
     tech_stories = digest[Topic.TECH]
     assert len(tech_stories) == 1
     assert tech_stories[0].topic is Topic.TECH
+
+
+def test_build_digest_with_no_candidates_returns_empty_dict():
+    class EmptySource:
+        def fetch_topic(self, topic, since):
+            return []
+
+    digest = build_digest(
+        feed_source=EmptySource(),
+        extractor=TrafilaturaExtractor(),
+        since=SINCE,
+        topics=(Topic.CANADA,),
+        max_workers=2,
+    )
+    assert digest == {}

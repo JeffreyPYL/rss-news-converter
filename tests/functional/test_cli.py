@@ -77,6 +77,7 @@ def test_run_digest_delivers_to_email_obsidian_and_the_epub_copy(
     tmp_path, all_feeds_empty_except_one_canada_story
 ):
     state = RunState(tmp_path / "state.json")
+    state.record_success(at=NOW - timedelta(hours=1))
     recording_sender = RecordingSmtpSender()
     email_delivery = EmailDelivery(
         sender=recording_sender, from_addr="me@example.com", to_addr="kindle@kindle.com"

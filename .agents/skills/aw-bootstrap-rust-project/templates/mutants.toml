@@ -1,0 +1,5 @@
+# Install as .cargo/mutants.toml. Unit tests only; skip behavior-free categories.
+exclude_globs = ["**/config*.rs", "**/config/**", "**/consts*.rs", "**/main.rs", "**/generated/**"]
+exclude_re = ["impl Debug", "impl Display", "tracing::"]
+test_tool = "nextest"
+additional_cargo_test_args = ["--lib"]

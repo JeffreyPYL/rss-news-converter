@@ -7,10 +7,10 @@ import pytest
 from news_digest.application.synthesis import (
     apply_synthesis,
     story_key,
-    synthesis_enabled,
 )
 from news_digest.domain.models import Article, Story, Topic
 from news_digest.infrastructure.rendering.obsidian_renderer import ObsidianRenderer
+from news_digest.infrastructure.settings import Settings
 
 
 def make_article(**overrides) -> Article:
@@ -41,21 +41,21 @@ def multi_outlet_story():
 def test_synthesis_off_by_default(monkeypatch):
     monkeypatch.delenv("NEWS_DIGEST_SYNTHESIS_ENABLED", raising=False)
 
-    assert synthesis_enabled() is False
+    assert Settings().is_synthesis_enabled is False
 
 
 @pytest.mark.parametrize("value", ["1", "true", "TRUE", "yes", "YES", " yes "])
 def test_synthesis_enabled_accepts_truthy_values(monkeypatch, value):
     monkeypatch.setenv("NEWS_DIGEST_SYNTHESIS_ENABLED", value)
 
-    assert synthesis_enabled() is True
+    assert Settings().is_synthesis_enabled is True
 
 
 @pytest.mark.parametrize("value", ["0", "false", "no", ""])
 def test_synthesis_enabled_rejects_falsy_values(monkeypatch, value):
     monkeypatch.setenv("NEWS_DIGEST_SYNTHESIS_ENABLED", value)
 
-    assert synthesis_enabled() is False
+    assert Settings().is_synthesis_enabled is False
 
 
 def test_synthesis_off_run_contains_no_generated_commentary(
@@ -65,7 +65,9 @@ def test_synthesis_off_run_contains_no_generated_commentary(
     digest = {Topic.CANADA: [multi_outlet_story]}
 
     apply_synthesis(
-        digest, {story_key(multi_outlet_story): "A synthesis that should be ignored."}
+        digest,
+        {story_key(multi_outlet_story): "A synthesis that should be ignored."},
+        enabled=Settings().is_synthesis_enabled,
     )
 
     assert multi_outlet_story.synthesis is None
@@ -86,6 +88,7 @@ def test_synthesized_story_group_still_shows_every_original_article(
                 multi_outlet_story
             ): "BBC and CBC both report the talks broke down over tariffs."
         },
+        enabled=Settings().is_synthesis_enabled,
     )
 
     assert multi_outlet_story.synthesis is not None
@@ -93,3 +96,12 @@ def test_synthesized_story_group_still_shows_every_original_article(
     assert "BBC and CBC both report the talks broke down over tariffs." in markdown
     assert "BBC's own coverage of the story." in markdown
     assert "CBC's own coverage of the story." in markdown
+
+
+def test_apply_synthesis_enabled_by_default(multi_outlet_story):
+    digest = {Topic.CANADA: [multi_outlet_story]}
+    apply_synthesis(
+        digest,
+        {story_key(multi_outlet_story): "Default enabled synthesis."},
+    )
+    assert multi_outlet_story.synthesis == "Default enabled synthesis."

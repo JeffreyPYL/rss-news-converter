@@ -81,6 +81,8 @@ Two adapters additionally take their own injected seam, for the same reason `Ema
 | `EmailDelivery` | `SmtpSender` | `SmtplibSender` (wraps `smtplib.SMTP_SSL`) |
 | `DefuddleExtractor` | `ProcessRunner` | `subprocess.run` |
 | `TrafilaturaExtractor` | `ExtractFn` | `trafilatura.extract` |
+| `DropboxApiDelivery` | `DropboxClient` | `dropbox.Dropbox` |
+| `GoogleDriveDelivery` | `DriveFilesResource` (returns `DriveExecutable`) | `googleapiclient.discovery.build("drive", "v3").files()` |
 
 ## Known gaps
 
